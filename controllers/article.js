@@ -7,7 +7,7 @@ class articleController {
    */
   static async create(ctx){
     let req = ctx.request.body;
-    if(req.title&&req.author&&req.content&&req.category){
+    if(req.title&&req.author&&req.content&&req.articleTypeId){
       try{
         //创建文章模型
         const ret = await ArticleModel.createArticle(req);
@@ -18,14 +18,14 @@ class articleController {
         ctx.body = {
           code: 200,
           msg: '创建文章成功',
-          data: data
+          data
         }
       }catch(err){
         ctx.response.status = 412;
         ctx.body = {
           code: 412,
           msg: '创建文章失败',
-          data: err
+          err
         }
       }
     }else {
@@ -38,11 +38,11 @@ class articleController {
   }
 
   static async list(ctx) {
-    let type = ctx.params.type;
-    if(type){
+    let articleTypeId = ctx.params.articleTypeId;
+    if(articleTypeId){
       try{
         // 获取选择类型的文章列表
-        let data = await ArticleModel.getArticleListByType(type);
+        let data = await ArticleModel.getArticleListByType(articleTypeId);
         ctx.response.status = 200;
         ctx.body = {
           code: 200,

@@ -3,6 +3,7 @@ const db = require('../config/db');
 const Sequelize = db.sequelize;
 
 const Article = Sequelize.import('../schema/article');
+const ArticleType = Sequelize.import('../schema/articleType');
 Article.sync({force:false});
 
 class ArticleModel {
@@ -16,19 +17,19 @@ class ArticleModel {
       title:data.title, //标题
       author:data.author, //作者
       content: data.content, //文章内容
-      category: data.category //文章分类
+      articleTypeId: data.articleTypeId //文章分类
     });
   }
 
   /**
    * 获取文章列表
-   * @param type 文章类型
+   * @param articleTypeId 文章类型
    * @returns 
    */
-  static async getArticleListByType(type) {
+  static async getArticleListByType(articleTypeId) {
     return await Article.findAndCountAll({
       where: {
-        category: type
+        articleTypeId
       }
     })
   }

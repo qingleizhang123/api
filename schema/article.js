@@ -26,10 +26,9 @@ module.exports = function(sequelize,DataTypes){
       field:'content'
     },
     //文章分类
-    category:{
-      type:DataTypes.STRING,
-      allowNull:false,
-      field:'category'
+    articleTypeId:{
+      type:DataTypes.INTEGER,
+      allowNull:false
     },
     //创建时间
     createdAt:{
