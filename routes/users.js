@@ -26,4 +26,13 @@ router.get('/articleType/list',ArticleTypeController.list);
 //获取博主简介
 router.get('/person/resume',PersonControler.resume);
 
+//新建博主简介
+router.post('/person/create',PersonControler.create);
+
+//修改博主简介
+router.post('/person/edit',PersonControler.update);
+
+//删除博主简介
+router.post('/person/delete',PersonControler.delete);
+
 module.exports = router
