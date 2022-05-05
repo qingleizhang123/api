@@ -2,6 +2,7 @@ const router = require('koa-router')()
 const ArticleController = require('../controllers/article');
 const PersonControler = require('../controllers/person');
 const ArticleTypeController = require('../controllers/articleType');
+const UserControler = require('../controllers/user');
 
 router.prefix('/api/v1')
 
@@ -34,5 +35,17 @@ router.post('/person/edit',PersonControler.update);
 
 //删除博主简介
 router.post('/person/delete',PersonControler.delete);
+
+//用户登录
+router.post('/user/login',UserControler.login);
+
+//新建博主简介
+router.post('/user/create',UserControler.create);
+
+//修改博主简介
+router.post('/user/edit',UserControler.updatePassword);
+
+//删除博主简介
+router.post('/user/delete',UserControler.delete);
 
 module.exports = router
