@@ -1,30 +1,44 @@
 const UserModel = require('../model/user');
+const createToken = require('../utils/createToken');
+const checkToken = require('../utils/checkToken');
 
 class UserControler {
   static async login(ctx) {
-    let req = ctx.request.body;
-    if (req.userName && req.password) {
-      try{
-        let data = await UserModel.getUser(req);
+    const { userName, password } = ctx.request.body;
+
+    if (userName && password) {
+      try {
+        let data = await UserModel.getUser(userName);
         ctx.response.status = 200;
-        if (data) {
+        if (!data) {
+          ctx.body = {
+            code: -1,
+            msg: '用户名不存在'
+          }
+        } else if (data.password !== password) {
+          ctx.body = {
+            code: -1,
+            msg: '密码错误'
+          }
+        } else if (!data.state) {
+          ctx.body = {
+            code: -1,
+            msg: '账号还未审核'
+          }
+        }else if (data.password === password) {
+          const token = createToken(password);
           ctx.body = {
             code: 200,
             msg: '账号密码正确',
-            data: data
-          }
-        } else {
-          ctx.body = {
-            code: 412,
-            msg: '账号密码错误',
-            data: data
+            data: data,
+            token
           }
         }
       } catch(err) {
         ctx.response.status = 412;
         ctx.body = {
           code: 412,
-          msg: '账号密码错误',
+          msg: '登录失败，请重新登录',
           data
         }
       }
@@ -63,6 +77,7 @@ class UserControler {
     let req = ctx.request.body;
     if (req.userName && req.password) {
       try {
+        console.log(req);
         let data = await UserModel.createUser(req);
         ctx.response.status = 200;
         ctx.response.body = {

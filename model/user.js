@@ -14,7 +14,9 @@ class PersonModel {
   static async createUser(data) {
     return await User.create({
       userName: data.userName,
-      password: data.password
+      password: data.password,
+      email: data.email,
+      state: false
     });
   }
 
@@ -22,11 +24,10 @@ class PersonModel {
    * 账号密码验证
    * @returns {Promise<Model>}
    */
-  static async getUser(data) {
+  static async getUser(userName) {
     return await User.findOne({
       where: {
-        userName: data.userName,
-        password: data.password
+        userName: userName
       }
     });
   }
