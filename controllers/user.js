@@ -1,6 +1,7 @@
 const UserModel = require('../model/user');
 const createToken = require('../utils/createToken');
 const checkToken = require('../utils/checkToken');
+const { getUserlist } = require('../model/user');
 
 class UserControler {
   static async login(ctx) {
@@ -38,7 +39,7 @@ class UserControler {
         ctx.response.status = 412;
         ctx.body = {
           code: 412,
-          msg: '登录失败，请重新登录',
+          msg: '登录失败，请重新输入',
           data
         }
       }
@@ -128,6 +129,83 @@ class UserControler {
         msg: '参数不齐全'
       }
     }
+  }
+
+  static async verify(ctx) {
+    let req = ctx.request.body;
+    if (req.userName) {
+      try {
+        let data = await UserModel.verifyUser(req);
+        ctx.response.status = 200;
+        ctx.response.body = {
+          code: 200,
+          msg: '账号审核完成',
+          data
+        }
+      } catch (err) {
+        ctx.response.status = 412;
+        ctx.response.body = {
+          code: 412,
+          msg: '接口请求失败',
+          data
+        }
+      }
+    } else {
+      ctx.response.status = 416;
+      ctx.body = {
+        code: 416,
+        msg: '参数不齐全'
+      }
+    }
+  }
+
+  static async list(ctx) {
+    let req = ctx.request.body;
+    try{
+      const data = await UserModel.getUserlist();
+      ctx.response.status = 200;
+      ctx.body = {
+        code: 200,
+        msg: '查询成功',
+        data
+      }
+    }catch(err){
+      ctx.response.status = 412;
+      ctx.body = {
+        code: 412,
+        msg: '查询失败',
+        err
+      }
+    }
+  }
+
+  static async stateList(ctx) {
+    let state = ctx.params.state;
+    if (state) {
+      try{
+        const data = await UserModel.getUserByState(state);
+        ctx.response.status = 200;
+        ctx.body = {
+          code: 200,
+          msg: '查询成功',
+          data
+        }
+      }catch(err){
+        ctx.response.status = 412;
+        ctx.body = {
+          code: 412,
+          msg: '查询失败',
+          err
+        }
+      }
+    } else {
+      ctx.response.status = 416;
+        ctx.body = {
+          code: 416,
+          msg: '参数不齐全'
+        }
+    }
+    
   }
 }
 

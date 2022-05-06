@@ -60,6 +60,42 @@ class PersonModel {
       }
     })
   }
+
+  /**
+   * 审核注册账号
+   * @param {*} data 
+   * @returns 
+   */
+  static async verifyUser(data) {
+    return await User.update({
+      state: data.state
+    }, {
+      where: {
+        userName: data.userName
+      }
+    })
+  }
+
+  /**
+   * 获取账号列表
+   * @returns 
+   */
+  static async getUserlist() {
+    return await User.findAndCountAll();
+  }
+
+  /**
+   * 根据状态筛选账号列表
+   * @param {*} state 
+   * @returns 
+   */
+  static async getUserByState(state) {
+    return await User.findOne({
+      where: {
+        state
+      }
+    })
+  }
 }
 
 module.exports = PersonModel;
