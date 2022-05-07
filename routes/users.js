@@ -3,6 +3,7 @@ const ArticleController = require('../controllers/article');
 const PersonControler = require('../controllers/person');
 const ArticleTypeController = require('../controllers/articleType');
 const UserControler = require('../controllers/user');
+const ProthesisControler = require('../controllers/prothesis');
 
 router.prefix('/api/v1')
 
@@ -56,5 +57,14 @@ router.post('/user/list',UserControler.list);
 
 //根据状态获取账号列表
 router.get('/user/stateList:state',UserControler.stateList)
+
+//新建假体
+router.post('/prothesis/create',ProthesisControler.create);
+
+//删除假体
+router.post('/prothesis/delete',ProthesisControler.delete);
+
+//获取假体列表
+router.post('/prothesis/list',ProthesisControler.list);
 
 module.exports = router

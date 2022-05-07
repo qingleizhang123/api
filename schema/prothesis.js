@@ -1,34 +1,34 @@
 const moment = require('moment')
 module.exports = function(sequelize,DataTypes) {
-  return sequelize.define('account', {
+  return sequelize.define('prothesis', {
     id:{
       type:DataTypes.INTEGER,
       primaryKey:true,
       allowNull:true,
       autoIncrement:true
     },
-    // 账号
-    userName: {
+    // 假体名称
+    prothesisName: {
       type:DataTypes.STRING,
       allowNull:true,
-      field: 'userName'
+      field: 'prothesisName'
     },
-    // 密码
-    password: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      field: 'password'
-    },
-    // 邮箱
-    email: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      field: 'email'
-    },
-    state: {
+    // 假体类型
+    prothesisType: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      field: 'state'
+      field: 'prothesisType'
+    },
+    // 假体厂商
+    prothesisFactory: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      field: 'prothesisFactory'
+    },
+    tag: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      field: 'tag'
     }
   },{
     freezeTableName:true
