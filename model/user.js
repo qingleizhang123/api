@@ -5,7 +5,7 @@ const Sequelize = db.sequelize;
 const User = Sequelize.import('../schema/user');
 User.sync({force:false});
 
-class PersonModel {
+class UserModel {
   /**
    * 新建账号
    * @param {*} data 
@@ -16,7 +16,7 @@ class PersonModel {
       userName: data.userName,
       password: data.password,
       email: data.email,
-      state: false
+      state: 0
     });
   }
 
@@ -80,8 +80,11 @@ class PersonModel {
    * 获取账号列表
    * @returns 
    */
-  static async getUserlist() {
-    return await User.findAndCountAll();
+  static async getUserlist(data) {
+    return await User.findAndCountAll({
+      offset: (data.page - 1) * data.pageSize,
+      limit: data.pageSize
+    });
   }
 
   /**
@@ -98,4 +101,4 @@ class PersonModel {
   }
 }
 
-module.exports = PersonModel;
+module.exports = UserModel;

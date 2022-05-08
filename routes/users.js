@@ -4,6 +4,7 @@ const PersonControler = require('../controllers/person');
 const ArticleTypeController = require('../controllers/articleType');
 const UserControler = require('../controllers/user');
 const DriverController = require('../controllers/drivers');
+const ProthesisControler = require('../controllers/prothesis');
 
 router.prefix('/api/v1')
 
@@ -60,5 +61,14 @@ router.get('/user/stateList:state',UserControler.stateList);
 
 //获取磁盘目录
 router.get('/driver/list',DriverController.getAllDrivers);
+
+//新建假体
+router.post('/prothesis/create',ProthesisControler.create);
+
+//删除假体
+router.post('/prothesis/delete',ProthesisControler.delete);
+
+//获取假体列表
+router.post('/prothesis/list',ProthesisControler.list);
 
 module.exports = router

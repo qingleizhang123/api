@@ -1,7 +1,5 @@
 const UserModel = require('../model/user');
 const createToken = require('../utils/createToken');
-const checkToken = require('../utils/checkToken');
-const { getUserlist } = require('../model/user');
 
 class UserControler {
   static async login(ctx) {
@@ -161,20 +159,28 @@ class UserControler {
 
   static async list(ctx) {
     let req = ctx.request.body;
-    try{
-      const data = await UserModel.getUserlist();
-      ctx.response.status = 200;
-      ctx.body = {
-        code: 200,
-        msg: '查询成功',
-        data
+    if (req.page && req.pageSize) {
+      try{
+        const data = await UserModel.getUserlist(req);
+        ctx.response.status = 200;
+        ctx.body = {
+          code: 200,
+          msg: '查询成功',
+          data
+        }
+      }catch(err){
+        ctx.response.status = 412;
+        ctx.body = {
+          code: 412,
+          msg: '查询失败',
+          err
+        }
       }
-    }catch(err){
-      ctx.response.status = 412;
+    } else {
+      ctx.response.status = 416;
       ctx.body = {
-        code: 412,
-        msg: '查询失败',
-        err
+        code: 416,
+        msg: '参数不齐全'
       }
     }
   }
