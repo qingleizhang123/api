@@ -3,6 +3,7 @@ const ArticleController = require('../controllers/article');
 const PersonControler = require('../controllers/person');
 const ArticleTypeController = require('../controllers/articleType');
 const UserControler = require('../controllers/user');
+const DriverController = require('../controllers/drivers');
 
 router.prefix('/api/v1')
 
@@ -55,6 +56,9 @@ router.post('/user/verify',UserControler.verify);
 router.post('/user/list',UserControler.list);
 
 //根据状态获取账号列表
-router.get('/user/stateList:state',UserControler.stateList)
+router.get('/user/stateList:state',UserControler.stateList);
+
+//获取磁盘目录
+router.get('/driver/list',DriverController.getAllDrivers);
 
 module.exports = router
