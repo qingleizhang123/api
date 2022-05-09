@@ -8,47 +8,45 @@
  // cmd命令
  const cmdOrder = {
    getAllDrive: () => ("wmic logicaldisk where drivetype=3 get deviceid"),
-   getOneDriveName: (drive: string) => (`wmic logicaldisk where name="${drive}:" get volumename`)
+   getOneDriveName: (drive) => (`wmic logicaldisk where name="${drive}:" get volumename`)
  }
  
  /**
   * 获取电脑中所有盘符及其名称
   * @returns 电脑中所有盘符及其名称
   */
- export default async function getAllDrive(): Promise<string[]> {
-  let result: string[] = [];
+
+  module.exports =  async () => {
+  let result = [];
   let promise = new Promise((resolve, reject) => {
     // 获取电脑中所有盘符
-    process.exec(cmdOrder.getAllDrive(), (error: any, stdout: any) => {
+    process.exec(cmdOrder.getAllDrive(), (error, stdout) => {
       if (error !== null) {
           console.error(error);
           return;
       }
       //@ts-ignore
       let stdoutArr = [...stdout];
-      let res: string[] = [];
-      stdoutArr.forEach((v: string, i: number) => {
+      let res = [];
+      stdoutArr.forEach((v, i) => {
         if (v === ':') {
           res.push(stdoutArr[i - 1]);
         }
       })
-      let resList: {
-        drive: string,
-        name: string
-      }[] = [];
-      let promiseArr: Promise<any>[] = [];
+      let resList = [];
+      let promiseArr = [];
       // 获取所有盘符的所有名称
-      res.forEach((v: string) => {
+      res.forEach((v) => {
         promiseArr.push(
           new Promise((resolve, reject) => {
-            process.exec(cmdOrder.getOneDriveName(v), (error: any, stdout: any) => {
+            process.exec(cmdOrder.getOneDriveName(v), (error, stdout) => {
               if (error !== null) {
                 console.error(error);
                 return;
               }
               let stdoutArr = [...stdout];
-              let res: string[] = [];
-              stdoutArr.forEach((v: string, i: number) => {
+              let res = [];
+              stdoutArr.forEach((v, i) => {
                 if (v !== ' ' && v !== '\n' && v !== '\r') {
                     res.push(v);
                 }
@@ -68,7 +66,7 @@
       });
     });
   })
-  await promise.then((res: any) => {
+  await promise.then((res) => {
       result = res;
   })
   // console.log(result);

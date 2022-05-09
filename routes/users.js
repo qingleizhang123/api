@@ -5,6 +5,7 @@ const ArticleTypeController = require('../controllers/articleType');
 const UserControler = require('../controllers/user');
 const DriverController = require('../controllers/drivers');
 const ProthesisControler = require('../controllers/prothesis');
+const RoleControler = require('../controllers/role');
 
 router.prefix('/api/v1')
 
@@ -70,5 +71,14 @@ router.post('/prothesis/delete',ProthesisControler.delete);
 
 //获取假体列表
 router.post('/prothesis/list',ProthesisControler.list);
+
+//获取角色列表
+router.post('/role/list',RoleControler.list);
+
+//新建角色
+router.post('/role/create',RoleControler.create);
+
+//删除角色
+router.post('/role/delete',RoleControler.delete);
 
 module.exports = router
