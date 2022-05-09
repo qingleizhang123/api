@@ -1,5 +1,7 @@
 const UserModel = require('../model/user');
 const createToken = require('../utils/createToken');
+const nodeMailer = require('nodemailer');
+const Email = require('../config/smtp');
 
 class UserControler {
   static async login(ctx) {
@@ -140,6 +142,46 @@ class UserControler {
           msg: '账号审核完成',
           data
         }
+
+        const result = req.state ? '通过' : '不通过';
+        
+        // QQ邮箱smtp服务权限校验
+        const transporter = nodeMailer.createTransport({
+          /**
+           *  端口465和587用于电子邮件客户端到电子邮件服务器通信 - 发送电子邮件。
+           *  端口465用于smtps SSL加密在任何SMTP级别通信之前自动启动。
+           *  端口587用于msa
+           */
+          port: 587,
+          secure: false, // 为true时监听465端口，为false时监听其他端口       
+          service: Email.smtp.host,
+          auth: {
+            user: Email.smtp.user,
+            pass: Email.smtp.pass
+          }
+        })
+
+        // 邮件需要接收的信息
+        const ko = {
+          email: req.email
+        }
+
+        // 邮件中需要显示的内容
+        const mailOptions = {
+          from: `${Email.smtp.user}`, // 邮件来自
+          to: ko.email,
+          subject: '注册账号审核',
+          html: `您注册的账号${req.userName}已完成审核,审核结果为${result}!`
+        }
+
+        transporter.sendMail(mailOptions, (err) => {
+          if (err) {
+            console.log('error');
+            return;
+          }
+          console.log('发送成功');
+        })
+
       } catch (err) {
         ctx.response.status = 412;
         ctx.response.body = {
