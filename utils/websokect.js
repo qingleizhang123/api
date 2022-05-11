@@ -43,7 +43,7 @@ const WebSocketApi = (wss, app) => {
       app.context.cusReader = [...cusReader]
     }
     ws.on('close', () => {
-      if (from == 'sender') {
+      if (role == 'sender') {
         // 清除发起端
         let index = app.context.cusSender.findIndex(row => row == ws)
         app.context.cusSender.splice(index, 1)
@@ -79,17 +79,26 @@ const WebSocketApi = (wss, app) => {
 }
 
 const eventHandel = (message, ws, role, cusSender, cusReader) => {
+  console.log('22222222');
   if (role == 'reader') {
-    let arrval = data.split('|')
-    let [type, roomid] = arrval
+    let arrval = message.split('|')
+    let [type, roomid, val] = arrval;
+    console.log(message, role, ws);
     if (type == 'join') {
       let seader = cusSender.find(row => row.roomid == roomid)
       if (seader) {
         seader.send(`${type}|${ws.userid}`)
       }
     }
+    if (type == 'message') {
+      let seader = cusSender.find(row => row.roomid == roomid)
+      if (seader) {
+        seader.send(`${type}|${message}`)
+      }
+    }
   }
-  if (from == 'sender') {
+  if (role == 'sender') {
+    console.log('33333',message);
     let arrval = message.split('|')
     let [type, userid, val] = arrval
     // 注意：这里的 type, userid, val 都是通用值，不管传啥，都会原样传给 reader
@@ -97,6 +106,14 @@ const eventHandel = (message, ws, role, cusSender, cusReader) => {
       let reader = cusReader.find(row => row.userid == userid)
       if (reader) {
         reader.send(`${type}|${ws.roomid}|${val}`)
+      }
+    }
+    if (type == 'message') {
+      console.log(cusReader,userid);
+      let reader = cusReader.find(row => row.userid == userid)
+      console.log(reader);
+      if (reader) {
+        reader.send(`${type}|${message}`)
       }
     }
   }
