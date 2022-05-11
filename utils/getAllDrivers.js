@@ -1,22 +1,16 @@
-/**
- * @Description 获取电脑中所盘符及其名称
- * @Author WJW
- * @Date 2022-01-25
- */
- 
- const process = require('child_process');
- // cmd命令
- const cmdOrder = {
-   getAllDrive: () => ("wmic logicaldisk where drivetype=3 get deviceid"),
-   getOneDriveName: (drive) => (`wmic logicaldisk where name="${drive}:" get volumename`)
- }
- 
- /**
-  * 获取电脑中所有盘符及其名称
-  * @returns 电脑中所有盘符及其名称
-  */
+const process = require('child_process');
+// cmd命令
+const cmdOrder = {
+  getAllDrive: () => ("wmic logicaldisk where drivetype=3 get deviceid"),
+  getOneDriveName: (drive) => (`wmic logicaldisk where name="${drive}:" get volumename`)
+}
 
-  module.exports =  async () => {
+/**
+* 获取电脑中所有盘符及其名称
+* @returns 电脑中所有盘符及其名称
+*/
+
+module.exports =  async () => {
   let result = [];
   let promise = new Promise((resolve, reject) => {
     // 获取电脑中所有盘符
@@ -72,5 +66,5 @@
   // console.log(result);
   
   return result;
- }
+}
  

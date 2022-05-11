@@ -1,10 +1,12 @@
 const Koa = require('koa')
 const app = new Koa()
+const path = require('path');
 const views = require('koa-views')
 const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
+const koaBody = require('koa-body')
 
 const index = require('./routes/index')
 const users = require('./routes/users')
@@ -38,6 +40,16 @@ app.use(async (ctx, next) => {
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 
+// koa-body
+app.use(koaBody({
+  multipart: true,
+  formidable: {
+    uploadDir: path.join(__dirname,'images'),
+    keepExtensions: true,
+    maxFileSize: 20*1024*1024 // 设置上传文件大小最大限制，默认2M
+  }
+}))
+
 // cors
 app.use(cors())
 
@@ -45,5 +57,7 @@ app.use(cors())
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
 });
+
+
 
 module.exports = app

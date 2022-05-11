@@ -5,6 +5,7 @@ const ArticleTypeController = require('../controllers/articleType');
 const UserControler = require('../controllers/user');
 const DriverController = require('../controllers/drivers');
 const ProthesisControler = require('../controllers/prothesis');
+const DeviceControler = require('../controllers/device');
 const RoleControler = require('../controllers/role');
 
 router.prefix('/api/v1')
@@ -72,6 +73,15 @@ router.post('/prothesis/delete',ProthesisControler.delete);
 //获取假体列表
 router.post('/prothesis/list',ProthesisControler.list);
 
+//新建器械
+router.post('/device/create',DeviceControler.create);
+
+//删除器械
+router.post('/device/delete',DeviceControler.delete);
+
+//获取器械列表
+router.post('/device/list',DeviceControler.list);
+
 //获取角色列表
 router.post('/role/list',RoleControler.list);
 
@@ -80,5 +90,15 @@ router.post('/role/create',RoleControler.create);
 
 //删除角色
 router.post('/role/delete',RoleControler.delete);
+
+// 图片上传
+async function upload( ctx, next ) {
+  const file = ctx.request.files
+  const baseName = path.basename(file['img'].path)
+  ctx.body = { url: `${ctx.origin}/images/${baseName}` }
+}
+
+// 用户图片上传
+router.post('/upload', upload)
 
 module.exports = router

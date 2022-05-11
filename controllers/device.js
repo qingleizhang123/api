@@ -1,32 +1,23 @@
-const path = require('path');
-const fs = require('fs');
-const ProthesisModel = require('../model/prothesis');
-const saveFilePath = 'images';
+const DeviceModel = require('../model/device');
 
-class ProthesisControler {
+class DeviceControler {
   static async create(ctx) {
     let req = ctx.request.body;
-    const file = req.file;
     if (req.name && req.type && req.factory) {
       try {
-        console.log(req, file.path);
-        /* const reader = fs.createReadStream('images/1.txt');
-        let filePath = path.join(__dirname, 'images') + `/${file.name}`;
-        const upStream = fs.createWriteStream(filePath);
-        reader.pipe(upStream); */
         
-        let data = await ProthesisModel.createProthesis(req);
+        let data = await DeviceModel.createDevice(req);
         ctx.response.status = 200;
         ctx.response.body = {
           code: 200,
-          msg: '新建假体成功',
+          msg: '新建器械成功',
           data
         }
       } catch (err) {
         ctx.response.status = 412;
         ctx.response.body = {
           code: 412,
-          msg: '新建假体失败',
+          msg: '新建器械失败',
           data
         }
       }
@@ -43,18 +34,18 @@ class ProthesisControler {
     let req = ctx.request.body;
     if (req.id) {
       try {
-        let data = await ProthesisModel.deleteProthesis(req.id);
+        let data = await DeviceModel.deleteDevice(req.id);
         ctx.response.status = 200;
         ctx.response.body = {
           code: 200,
-          msg: '删除假体成功',
+          msg: '删除器械成功',
           data
         }
       } catch (err) {
         ctx.response.status = 412;
         ctx.response.body = {
           code: 412,
-          msg: '删除假体失败',
+          msg: '删除器械失败',
           data
         }
       }
@@ -71,7 +62,7 @@ class ProthesisControler {
     let req = ctx.request.body;
     if (req.page && req.pageSize) {
       try{
-        const data = await ProthesisModel.getProthesislist(req);
+        const data = await DeviceModel.getDevicelist(req);
         ctx.response.status = 200;
         ctx.body = {
           code: 200,
@@ -94,21 +85,6 @@ class ProthesisControler {
       }
     }
   }
-
-  static saveFile(fileName, content) {
-    if (!fs.existsSync(saveFilePath)) {
-      if (fs.mkdirSync(saveFilePath)) {
-        console.log(`${saveFilePath} 创建成功`);
-      }
-    }
-
-    try {
-      fs.writeFileSync(path.join(saveFilePath, fileName), content);
-      console.log("文件保存成功");
-    } catch (error) {
-      console.log(error);
-    }
-  }
 }
 
-module.exports = ProthesisControler;
+module.exports = DeviceControler;

@@ -16,7 +16,9 @@ class ProthesisModel {
       prothesisName: data.name,
       prothesisType: data.type,
       prothesisFactory: data.factory,
-      tag: data.tag
+      tag: data.tag,
+      assemblyPoint: data.assembly,
+      description: data.desc,
     });
   }
 
