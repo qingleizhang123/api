@@ -2,8 +2,7 @@
 const WebSocketApi = (wss, app) => {
   wss.on('connection', (ws, req) => {
     let { url } = req // url 的值是 /webrtc/$role/$uniId
-    let { cusSender, cusReader } = app.context
-    console.log(cusSender, cusReader, '111')
+    let { cusSender, cusReader } = app.context;
     if (!url.startsWith('/webrtc')) {
       return ws.clode() // 关闭 url 前缀不是 /webrtc 的连接
     }
@@ -57,8 +56,6 @@ const WebSocketApi = (wss, app) => {
             })
         }
       }
-    })
-    ws.on('close', () => {
       if (role == 'reader') {
         // 接收端关闭逻辑
         let index = app.context.cusReader.findIndex(row => row == ws)
@@ -66,7 +63,7 @@ const WebSocketApi = (wss, app) => {
           app.context.cusReader.splice(index, 1)
         }
       }
-    })
+    });
     ws.on('message', msg => {
       if (typeof msg != 'string') {
         msg = msg.toString()
@@ -79,13 +76,13 @@ const WebSocketApi = (wss, app) => {
 }
 
 const eventHandel = (message, ws, role, cusSender, cusReader) => {
-  console.log('22222222');
   if (role == 'reader') {
     let arrval = message.split('|')
     let [type, roomid, val] = arrval;
-    console.log(message, role, ws);
+    console.log(type, roomid, val);
     if (type == 'join') {
       let seader = cusSender.find(row => row.roomid == roomid)
+      console.log('11111',seader, type);
       if (seader) {
         seader.send(`${type}|${ws.userid}`)
       }
@@ -93,15 +90,22 @@ const eventHandel = (message, ws, role, cusSender, cusReader) => {
     if (type == 'message') {
       let seader = cusSender.find(row => row.roomid == roomid)
       if (seader) {
-        seader.send(`${type}|${message}`)
+        console.log(message, type, val);
+        seader.send(`${type}|${val}`)
       }
     }
   }
   if (role == 'sender') {
-    console.log('33333',message);
     let arrval = message.split('|')
     let [type, userid, val] = arrval
     // 注意：这里的 type, userid, val 都是通用值，不管传啥，都会原样传给 reader
+    if (type == 'join') {
+      let reader = cusReader.find(row => row.userid == userid)
+      console.log('2222', reader);
+      if (reader) {
+        reader.send(`${type}|${ws.roomid}|${val}`)
+      }
+    }
     if (type == 'offer') {
       let reader = cusReader.find(row => row.userid == userid)
       if (reader) {
@@ -113,7 +117,8 @@ const eventHandel = (message, ws, role, cusSender, cusReader) => {
       let reader = cusReader.find(row => row.userid == userid)
       console.log(reader);
       if (reader) {
-        reader.send(`${type}|${message}`)
+        console.log(message, type, val)
+        reader.send(`${type}|${val}`)
       }
     }
   }
