@@ -94,6 +94,12 @@ const eventHandel = (message, ws, role, cusSender, cusReader) => {
         seader.send(`${type}|${val}`)
       }
     }
+    if (type == 'answer') {
+      let sender = cusSender.find(row => row.roomid == roomid)
+      if (sender) {
+        sender.send(`${type}|${ws.userid}|${val}`)
+      }
+    }
   }
   if (role == 'sender') {
     let arrval = message.split('|')
