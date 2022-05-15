@@ -118,6 +118,12 @@ const eventHandel = (message, ws, role, cusSender, cusReader) => {
         reader.send(`${type}|${ws.roomid}|${val}`)
       }
     }
+    if (type == 'candid') {
+      let reader = cusReader.find(row => row.userid == userid)
+      if (reader) {
+        reader.send(`${type}|${ws.roomid}|${val}`);
+      }
+    }
     if (type == 'message') {
       console.log(cusReader,userid);
       let reader = cusReader.find(row => row.userid == userid)
