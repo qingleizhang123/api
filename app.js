@@ -7,6 +7,7 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const koaBody = require('koa-body')
+const checkToken = require('./utils/checkToken');
 
 const index = require('./routes/index')
 const users = require('./routes/users')
@@ -27,6 +28,9 @@ app.use(require('koa-static')(__dirname + '/public'))
 app.use(views(__dirname + '/views', {
   extension: 'pug'
 }))
+
+// 添加token验证中间件
+app.use(checkToken);
 
 // logger
 app.use(async (ctx, next) => {

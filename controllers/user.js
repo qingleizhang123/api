@@ -27,7 +27,7 @@ class UserControler {
             msg: '账号还未审核'
           }
         }else if (data.password === password) {
-          const token = createToken(password);
+          const token = createToken(userName);
           ctx.body = {
             code: 200,
             msg: '账号密码正确',
@@ -75,6 +75,7 @@ class UserControler {
   }
 
   static async create(ctx) {
+    console.log(ctx, '333');
     let req = ctx.request.body;
     if (req.userName && req.password) {
       try {

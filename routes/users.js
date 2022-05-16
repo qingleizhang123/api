@@ -44,7 +44,7 @@ router.post('/person/delete',PersonControler.delete);
 router.post('/user/login',UserControler.login);
 
 //新建账号
-router.post('/user/create',UserControler.create);
+router.post('/user/register',UserControler.create);
 
 //修改账号密码
 router.post('/user/edit',UserControler.updatePassword);
