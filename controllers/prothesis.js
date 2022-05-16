@@ -5,7 +5,6 @@ const saveFilePath = 'images';
 
 class ProthesisControler {
   static async create(ctx) {
-    console.log(ctx, '333');
     let req = ctx.request.body;
     const file = req.file;
     if (req.name && req.type && req.factory) {

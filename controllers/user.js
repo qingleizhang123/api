@@ -6,7 +6,6 @@ const Email = require('../config/smtp');
 class UserControler {
   static async login(ctx) {
     const { userName, password } = ctx.request.body;
-
     if (userName && password) {
       try {
         let data = await UserModel.getUser(userName);
@@ -75,7 +74,6 @@ class UserControler {
   }
 
   static async create(ctx) {
-    console.log(ctx, '333');
     let req = ctx.request.body;
     if (req.userName && req.password) {
       try {
